@@ -1,4 +1,22 @@
 body {
   padding-top: 60px;
   padding-bottom: 40px;
+  margin: 0px;
+  padding: 0px;
+  background-image: url(/images/sunset.png);
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
+  background-color: #000;
+}
+
+.page {
+  background-color: #fff;
+
+  -moz-border-radius: 6px;
+  -webkit-border-radius:6px;
+  border-radius: 6px;
 }
