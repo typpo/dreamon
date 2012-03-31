@@ -19,7 +19,6 @@ $(function() {
       alert("Something went wrong and we couldn't add you, sorry :(");
     });
 
-
     return false;
   });
 });

@@ -5,6 +5,7 @@
       , "jade": "0.14.2"
       , "mongodb": "0.9.8"
       , "connect": "2.x"
+      , "validator": "latest"
     }
   , "devDependencies": {
     }
