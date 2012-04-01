@@ -89,6 +89,56 @@ app.get('/view/:id', function(req, res) {
             res.send('Sorry, something went wrong. :(.');
             return;
           }
+          if ('dl' in req.query)  {
+            res.send(JSON.stringify(items));
+          }
+          else if ('drop' in req.query) {
+            res.send('<a href="/view/' + req.params.id + '?reallydrop">Click here to delete your dream log.  This is permanent.</a>');
+          }
+          else if ('reallydrop' in req.query) {
+            collection.remove({unique: req.params.id},function(err, obj) {
+              if (err) {
+                res.send('Sorry, something went wrong. Please contact iwmiscs@gmail.com :(.');
+              }
+              else {
+                res.send('ok');
+              }
+            });
+          }
+          else {
+            res.render('view', {
+              dreams: items,
+            });
+          }
+        });
+      });
+    });
+  });
+});
+
+/* Download dreams */
+app.get('/download/:id', function(req, res) {
+  mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
+    if (err) {
+      res.send('Sorry, something went wrong. :(.');
+      return;
+    }
+    conn.collection('dreams', function(err, collection) {
+      if (err) {
+        res.send('Sorry, something went wrong. :(.');
+        return;
+      }
+
+      collection.find({unique:req.params.id}, function(err, cursor) {
+        if (err) {
+          res.send('Sorry, something went wrong. :(.');
+          return;
+        }
+        cursor.sort({time:-1}).toArray(function(err, items) {
+          if (err) {
+            res.send('Sorry, something went wrong. :(.');
+            return;
+          }
           res.render('view', {
             dreams: items,
           });
@@ -141,10 +191,8 @@ app.post('/parse', function(req, res) {
 
 function gotemail(to, text) {
   console.log('Got email from', to);
-
-  var id = to.slice(0, to.indexOf('@'));
-
   // send to mongo
+  var id = to.slice(0, to.indexOf('@'));
   mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
     if (err) {
       return;
