@@ -68,25 +68,30 @@ app.post('/signup', function(req, res) {
 
 /* View dreams */
 app.get('/view/:id', function(req, res) {
+
+  function fail(txt) {
+    res.send(txt || 'Sorry, something went wrong. :(.');
+  }
+
   mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
     if (err) {
-      res.send('Sorry, something went wrong. :(.');
+      fail();
       return;
     }
     conn.collection('dreams', function(err, collection) {
       if (err) {
-        res.send('Sorry, something went wrong. :(.');
+        fail();
         return;
       }
 
       collection.find({unique:req.params.id}, function(err, cursor) {
         if (err) {
-          res.send('Sorry, something went wrong. :(.');
+          fail();
           return;
         }
         cursor.sort({time:-1}).toArray(function(err, items) {
           if (err) {
-            res.send('Sorry, something went wrong. :(.');
+            fail();
             return;
           }
           if ('dl' in req.query)  {
@@ -98,7 +103,7 @@ app.get('/view/:id', function(req, res) {
           else if ('reallydrop' in req.query) {
             collection.remove({unique: req.params.id},function(err, obj) {
               if (err) {
-                res.send('Sorry, something went wrong. Please contact iwmiscs@gmail.com :(.');
+                fail('Sorry, something went wrong. Please contact iwmiscs@gmail.com :(.');
               }
               else {
                 res.send('ok');
@@ -118,25 +123,29 @@ app.get('/view/:id', function(req, res) {
 
 /* Download dreams */
 app.get('/download/:id', function(req, res) {
+  function fail(txt) {
+    res.send(txt || 'Sorry, something went wrong. :(.');
+  }
+
   mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
     if (err) {
-      res.send('Sorry, something went wrong. :(.');
+      fail();
       return;
     }
     conn.collection('dreams', function(err, collection) {
       if (err) {
-        res.send('Sorry, something went wrong. :(.');
+        fail();
         return;
       }
 
       collection.find({unique:req.params.id}, function(err, cursor) {
         if (err) {
-          res.send('Sorry, something went wrong. :(.');
+          fail();
           return;
         }
         cursor.sort({time:-1}).toArray(function(err, items) {
           if (err) {
-            res.send('Sorry, something went wrong. :(.');
+            fail();
             return;
           }
           res.render('view', {
