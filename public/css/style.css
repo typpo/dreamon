@@ -1,7 +1,7 @@
 body {
   margin: 0px;
   padding: 0px;
-  background-image: url(/images/sunset.png);
+  background-image: url(/images/background.png);
   background-repeat: no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
