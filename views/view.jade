@@ -22,7 +22,10 @@ div.container
           h2
             - var readable_date = new Date(dream.time);
             #{readable_date}
-          - var parts = dream.text.split('\n')
+          - var parts = dream.text.split('\n\n')
           - each part in parts
             p
-              #{part}
+              - var subparts = part.split('\n')
+              - each subpart in subparts
+                #{subpart}
+                br
