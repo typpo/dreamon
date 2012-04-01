@@ -7,7 +7,6 @@ body {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-
   background-color: #000;
 }
 
@@ -33,5 +32,5 @@ body {
   color: #0057A3;
   padding-left: 20px;
   padding-top: 10px;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
