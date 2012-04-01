@@ -66,10 +66,80 @@ app.post('/signup', function(req, res) {
 
 });
 
+/* View dreams */
+app.get('/view/:id', function(req, res) {
+  mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
+    if (err) {
+      res.send('Sorry, something went wrong. :(.');
+      return;
+    }
+    conn.collection('dreams', function(err, collection) {
+      if (err) {
+        res.send('Sorry, something went wrong. :(.');
+        return;
+      }
+
+      collection.find({unique:req.params.id}, function(err, cursor) {
+        if (err) {
+          res.send('Sorry, something went wrong. :(.');
+          return;
+        }
+        cursor.sort({time:-1}).toArray(function(err, items) {
+          if (err) {
+            res.send('Sorry, something went wrong. :(.');
+            return;
+          }
+          res.render('view', {
+            dreams: items,
+          });
+        });
+      });
+    });
+  });
+});
+
+/* Unsubscribe */
+app.get('/unsub/:id', function(req, res) {
+  mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
+    if (err) {
+      res.send('Sorry, something went wrong. Please email iwmiscs@gmail.com to unsubscribe :(.');
+      return;
+    }
+    conn.collection('people', function(err, collection) {
+      if (err) {
+        res.send('Sorry, something went wrong. Please email iwmiscs@gmail.com to unsubscribe :(.');
+        return;
+      }
+      var id;
+      try {
+        id = new mongo.ObjectID(req.params.id);
+      }
+      catch(e) {
+        res.send('Sorry, something went wrong. Please email iwmiscs@gmail.com to unsubscribe :(.');
+        return;
+      }
+      collection.remove({_id: id},function(err, obj) {
+        if (err) {
+          res.send('Sorry, something went wrong. Please email iwmiscs@gmail.com to unsubscribe :(.');
+        }
+        else {
+          res.send('Successfully removed.');
+        }
+      });
+    });
+  });
+});
+
+/* Received an email */
 app.post('/parse', function(req, res) {
   var to = req.body.to;
   var text = req.body.text;
 
+  gotemail(to, text);
+  res.send('');
+});
+
+function gotemail(to, text) {
   console.log('Got email from', to);
 
   var id = to.slice(0, to.indexOf('@'));
@@ -89,32 +159,7 @@ app.post('/parse', function(req, res) {
       });
     }); // end mongo collection
   }); // end mongo connection
-
-
-  // debug
-  /*
-  mailer.send({
-      host : "smtp.sendgrid.net",
-      port : "587",
-      domain : "keepdream.me",
-      to : 'typppo@gmail.com',
-      from : 'test@keepdream.me',
-      subject: 'got a posted email',
-      body: to + '\r\n\r\n' + text,
-      authentication : "login",
-      username : config.sendgrid.user,
-      password : config.sendgrid.key,
-    },
-    function(err, result){
-      if(err){
-        console.log(err, result);
-      }
-  });
-  */
-
-  res.send('');
-});
-
+}
 
 var port = process.env.PORT || 8080;
 app.listen(port, function() {
