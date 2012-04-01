@@ -1,5 +1,6 @@
 $(function() {
   var tz = jstz.determine_timezone().name();
+  mixpanel.track('main');
 
   $('#submit').on('click', function() {
     var email = $('#email').val();
@@ -8,6 +9,7 @@ $(function() {
 
 
     $.post('/signup', {'email': email,'tz': tz}, function(data) {
+      mixpanel.track('signup');
       if (data.success) {
         var html = 'Thanks, ' + email + '! You\'ll start getting emails tomorrow morning.';
         if (data.msg) {
@@ -16,11 +18,14 @@ $(function() {
         $('#success-body').html(html);
         $('#success-modal').modal();
         $('#email').val('');
+        mixpanel.track('signup success');
       }
       else {
+        mixpanel.track('signup fail', {data: email});
         alert("Something went wrong and we couldn't add you, sorry :(\n\n" + data.msg);
       }
     }).error(function() {
+      mixpanel.track('signup ajax fail', {data: email});
       alert("Something went wrong and we couldn't add you, sorry :(");
     });
 
