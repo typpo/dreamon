@@ -4,24 +4,27 @@
 
 var mongo = require('mongodb')
   , time = require('time')
+  , tzdata = require('./tzdata.js')
 
 // Figure out where it's between 3 and 4am right now
 
 function timeToSend(t) {
-  return t.getHours() > 3 && t.getHours() < 4;
+  if (!t) return false;
+  return t.getHours() == 3;
 }
 
-// there are some fucking weird time zones
-OFFSETS = [-12, -11, -10, -9, -8, -7, -6, -5, -4, -3.5, -3, -2, -1, 0, 2,
-        3, 3.5, 4, 4.5, 5, 5.5, 5.75, 6, 7, 8, 9, 9.5, 10, 11, 12];
-
-var now = new time.Date();
-now.setTimezone('UTC');
-
-for(var i=0; i < OFFSETS.length; i++) {
-  var offset = OFFSETS[i];
-
+for(var i=0; i < tzdata.names.length; i++) {
+  var name = tzdata.names[i];
   // get time for this offset
+  var t = new time.Date();
+  try {
+    t.setTimezone(name);
+  }
+  catch(e) { continue; }
 
+  if (timeToSend(t)) {
+    console.log('Time to send in', name);
 
+    // execute job for these places!
+  }
 }
