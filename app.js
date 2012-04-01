@@ -207,19 +207,19 @@ function gotemail(to, text) {
   // cut off text so we don't record original email
   var lines = text.split('\r\n');
   if (lines.length == 1)
-    text.split('\n');
+    lines = text.split('\n');
 
   var includelines = [];
   for (var i=0; i < lines.length; i++) {
     var line = lines[i];
     //if (line.length > 0 && line[0] == '<')
       //break;
-    if (line.indexOf(id) > -1)
+    if (line.indexOf(id) > -1) {
       break;
+    }
     includelines.push(line);
   }
-  text = includelines.join('\n');
-
+  dreamtext = includelines.join('\n');
 
   mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
     if (err) {
@@ -230,8 +230,13 @@ function gotemail(to, text) {
         return;
       }
 
-      collection.insert({unique:id, text:text, time:new Date().getTime()}, function(err) {
-        console.log('Recorded dream', id, text);
+      collection.insert({
+        unique:id,
+        text:dreamtext,
+        time:new Date().getTime(),
+        raw:text,
+      }, function(err) {
+        console.log('Recorded dream', id);
       });
     }); // end mongo collection
   }); // end mongo connection
@@ -242,4 +247,15 @@ app.listen(port, function() {
   console.log('Listening on', port);
 });
 
-gotemail('Dream On <123456@keepdream.me>', 'chicken\r\n\r\nnoodle soup\r\n\r\nYesterday, 123456 wrote:\r\nyo this shouldnt be incclclululdedd');
+gotemail('Dream On <testing@keepdream.me>',"This is another test response.\n\n" +
+
+
+
+    "On Sun, Apr 1, 2012 at 3:32 AM, Dream On <testing@keepdream.me> wrote:\n" +
+    "Good morning!\n\n" +
+
+    "Respond to this email with last night's dreams and we'll record them for you..\n\n" +
+
+    "Sincerely, DreamOn (http://keepdream.me/)" +
+
+    "View past dreams: http://keepdream.me/view/4f77ed3860c258a567aeabf8 | Unsubscribe: http://keepdream.me/unsub/4f77ed3860c258a567aeabf8");
