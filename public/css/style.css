@@ -23,36 +23,3 @@ body {
   margin-top: 70px;
   padding: 10px;
 }
-
-.panel {
-  padding:10px;
-
-}
-
-.hero-unit {
-  background-color: #fff;
-  padding-top: 10px;
-  padding-left:10px;
-  padding-bottom:0;
-  margin-bottom:0
-}
-
-.blurb {
-  border: 1px solid;
-
-}
-
-.bottom {
-  position:absolute;
-  bottom:0px;
-  right:0px;
-  height:25px;
-  width: 125px;
-  background-color: #ccc;
-  padding-top: 5px;
-  text-align: center;
-
-  -moz-border-radius: 6px;
-  -webkit-border-radius:6px;
-  border-radius: 6px;
-}
