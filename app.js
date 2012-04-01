@@ -248,15 +248,3 @@ app.listen(port, function() {
   console.log('Listening on', port);
 });
 
-gotemail('Dream On <testing@keepdream.me>',"This is another test response.\n\n" +
-
-
-
-    "On Sun, Apr 1, 2012 at 3:32 AM, Dream On <testing@keepdream.me> wrote:\n" +
-    "Good morning!\n\n" +
-
-    "Respond to this email with last night's dreams and we'll record them for you..\n\n" +
-
-    "Sincerely, DreamOn (http://keepdream.me/)" +
-
-    "View past dreams: http://keepdream.me/view/4f77ed3860c258a567aeabf8 | Unsubscribe: http://keepdream.me/unsub/4f77ed3860c258a567aeabf8");
