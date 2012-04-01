@@ -8,7 +8,7 @@
       , "connect": "2.x"
       , "validator": "latest"
       , "time": "latest"
-      , "sendgrid": "0.2.1"
+      , "mailer": "latest"
     }
   , "devDependencies": {
     }
