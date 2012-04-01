@@ -69,8 +69,8 @@ app.post('/signup', function(req, res) {
 });
 
 app.post('/parse', function(req, res) {
-  var to = req.body.to;
-  var text = req.body.text;
+  var to = req.body.to+'';
+  var text = req.body.text+'';
 
   console.log('Got email from', to);
 
