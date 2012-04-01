@@ -43,13 +43,13 @@ app.post('/signup', function(req, res) {
 
   // send to mongo
   var url = require('url').parse(process.env.MONGOHQ_URL || "mongodb://127.0.0.1:27017");
-  var db = new mongo.Db('dreams', new mongo.Server(url.hostname, parseInt(url.port), {}));
+  var db = new mongo.Db('keepdream', new mongo.Server(url.hostname, parseInt(url.port), {}));
   db.open(function(err, conn) {
     if (err) {
       res.send({success: false, msg: 'Could not connect to database.'});
       return;
     }
-    conn.collection('dreams', function(err, collection) {
+    conn.collection('people', function(err, collection) {
       if (err) {
         res.send({success: false, msg: 'Could not connect to database collection.'});
         return;
@@ -74,6 +74,35 @@ app.post('/parse', function(req, res) {
 
   console.log('Got email from', to);
 
+  var id = to.splice(0, id.indexOf('@'));
+
+  // send to mongo
+  var url = require('url').parse(process.env.MONGOHQ_URL || "mongodb://127.0.0.1:27017");
+  var db = new mongo.Db('keepdream', new mongo.Server(url.hostname, parseInt(url.port), {}));
+  db.open(function(err, conn) {
+    if (err) {
+      res.send({success: false, msg: 'Could not connect to database.'});
+      return;
+    }
+    conn.collection('dreams', function(err, collection) {
+      if (err) {
+        res.send({success: false, msg: 'Could not connect to database collection.'});
+        return;
+      }
+
+      collection.update({email:email}, {email:email, tz:tz}, {upsert:true}, function(err) {
+        if (err) {
+          res.send({success: false, msg: 'Could not update database.'});
+          return;
+        }
+        res.send({success: true});
+      });
+    }); // end mongo collection
+  }); // end mongo connection
+
+
+  // debug
+  /*
   mailer.send({
       host : "smtp.sendgrid.net",
       port : "587",
@@ -91,6 +120,7 @@ app.post('/parse', function(req, res) {
         console.log(err, result);
       }
   });
+  */
 
   res.send('');
 });
