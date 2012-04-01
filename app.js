@@ -1,7 +1,6 @@
 var express = require('express')
   , app = express.createServer()
   , mongo = require('mongodb')
-  , ObjectID = require('mongodb').ObjectID
   , connect = require('connect')
   , validator = require('validator')
 
@@ -28,6 +27,7 @@ app.get('/', function(req, res) {
 /* New signup */
 app.post('/signup', function(req, res) {
   var email = req.body.email;
+  var tz = req.body.tz;
 
   // check email
   try {
@@ -50,21 +50,12 @@ app.post('/signup', function(req, res) {
         return;
       }
 
-      collection.findOne({'email': email}, function(err, found) {
-        if (err || !found) {
-          // good. Now we add the new email
-          collection.insert({'email': email}, function(err, obj) {
-            if (err) {
-              res.send({success: false, msg: 'Could not update database.'});
-              return;
-            }
-            res.send({success: true});
-          });
+      collection.update({email:email}, {email:email, tz:tz}, {upsert:true}, function(err) {
+        if (err) {
+          res.send({success: false, msg: 'Could not update database.'});
+          return;
         }
-        else {
-          // This email already exists
-          res.send({success:true, msg: 'This email already exists in our database.'});
-        }
+        res.send({success: true});
       });
     }); // end mongo collection
   }); // end mongo connection
