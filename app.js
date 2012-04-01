@@ -89,9 +89,7 @@ app.post('/parse', function(req, res) {
       }
 
       collection.insert({unique:id, text:text, time:new Date().getTime()}, function(err) {
-        if (err) {
-          return;
-        }
+        console.log('Recorded dream', id);
       });
     }); // end mongo collection
   }); // end mongo connection
