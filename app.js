@@ -1,5 +1,6 @@
 var express = require('express')
   , app = express.createServer()
+  , _ = require('underscore')
   , mongo = require('mongodb')
   , connect = require('connect')
   , validator = require('validator')
@@ -39,7 +40,9 @@ app.post('/signup', function(req, res) {
   }
 
   // send to mongo
-  mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
+  var url = require('url').parse(process.env.MONGOHQ_URL || "mongodb://127.0.0.1:27017");
+  var db = new mongo.Db('dreams', new mongo.Server(url.hostname, parseInt(url.port), {}));
+  db.open(function(err, conn) {
     if (err) {
       res.send({success: false, msg: 'Could not connect to database.'});
       return;

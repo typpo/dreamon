@@ -3,10 +3,12 @@
   , "dependencies": {
       "express": "2.5.2"
       , "jade": "0.14.2"
+      , "underscore": "latest"
       , "mongodb": "0.9.8"
       , "connect": "2.x"
       , "validator": "latest"
       , "time": "latest"
+      , "sendgrid": "0.2.1"
     }
   , "devDependencies": {
     }
