@@ -5,4 +5,8 @@ module.exports = {
     key: '5hoh7opj',
   },
 
+  mongo: {
+    db_name: 'app3591439',
+  },
+
 }
