@@ -81,21 +81,17 @@ app.post('/parse', function(req, res) {
   var db = new mongo.Db('keepdream', new mongo.Server(url.hostname, parseInt(url.port), {}));
   db.open(function(err, conn) {
     if (err) {
-      res.send({success: false, msg: 'Could not connect to database.'});
       return;
     }
     conn.collection('dreams', function(err, collection) {
       if (err) {
-        res.send({success: false, msg: 'Could not connect to database collection.'});
         return;
       }
 
-      collection.update({email:email}, {email:email, tz:tz}, {upsert:true}, function(err) {
+      collection.insert({unique:id, text:text, time:new Date().getTime()}, function(err) {
         if (err) {
-          res.send({success: false, msg: 'Could not update database.'});
           return;
         }
-        res.send({success: true});
       });
     }); // end mongo collection
   }); // end mongo connection
