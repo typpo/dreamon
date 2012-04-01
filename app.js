@@ -192,9 +192,10 @@ app.get('/unsub/:id', function(req, res) {
 /* Received an email */
 app.post('/parse', function(req, res) {
   var to = req.body.to;
+  var from = req.body.from;
   var text = req.body.text;
 
-  gotemail(to, text);
+  gotemail(to, from, text);
   res.send('');
 });
 
@@ -214,7 +215,7 @@ function gotemail(to, text) {
     var line = lines[i];
     //if (line.length > 0 && line[0] == '<')
       //break;
-    if (line.indexOf(id) > -1) {
+    if (line.indexOf(id) > -1 || line.indexOf(from) > -1) {
       break;
     }
     includelines.push(line);
