@@ -13,9 +13,7 @@ body {
 
 .page {
   margin-top: 30px;
-
   background-color: #fff;
-
   -moz-border-radius: 6px;
   -webkit-border-radius:6px;
   border-radius: 6px;
@@ -32,6 +30,14 @@ body {
 }
 
 .hero-unit {
-  padding-top: 10px;
   background-color: #fff;
+  padding-top: 10px;
+  padding-left:10px;
+  padding-bottom:0;
+  margin-bottom:0
+}
+
+.blurb {
+  border: 1px solid;
+
 }
