@@ -8,7 +8,14 @@ div.navbar.navbar-fixed-top
             a(href='/') Home
 
 div.container
+
   div.dreamview.page
+    div(style='float:right')
+      | Log actions:
+      a(href='?dl')  Export
+      | ,
+      a(href='?drop') Delete
+
     - each dream, i in dreams
       div.row
         div.span8
