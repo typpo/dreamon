@@ -69,12 +69,12 @@ app.post('/signup', function(req, res) {
 });
 
 app.post('/parse', function(req, res) {
-  var to = req.body.to+'';
-  var text = req.body.text+'';
+  var to = req.body.to;
+  var text = req.body.text;
 
   console.log('Got email from', to);
 
-  var id = to.splice(0, to.indexOf('@'));
+  var id = to.slice(0, to.indexOf('@'));
 
   // send to mongo
   var url = require('url').parse(process.env.MONGOHQ_URL || "mongodb://127.0.0.1:27017");
