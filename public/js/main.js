@@ -26,4 +26,12 @@ $(function() {
 
     return false;
   });
+
+
+
+  $('#submit-feedback').on('click', function() {
+    $.post('/feedback', {'text': $('#feedback').val()}, function(data) {
+
+    });
+  });
 });
