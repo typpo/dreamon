@@ -21,7 +21,7 @@ function timeToSend(t) {
 }
 
 function processTz(tzName) {
-  connection.collection('dreams', function(err, collection) {
+  connection.collection('people', function(err, collection) {
     if (err) { closefn(); return; };
     collection.find({tz:tzName}, function(err, cursor) {
       if (err) { closefn(); return; };
@@ -68,7 +68,7 @@ function processTz(tzName) {
 }
 
 var url = require('url').parse(process.env.MONGOHQ_URL || "mongodb://127.0.0.1:27017");
-var db = new mongo.Db('dreams', new mongo.Server(url.hostname, parseInt(url.port), {}));
+var db = new mongo.Db('keepdream', new mongo.Server(url.hostname, parseInt(url.port), {}));
 db.open(function(err, conn) {
 //mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
   if (err) throw err;
