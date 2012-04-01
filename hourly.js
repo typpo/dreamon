@@ -67,10 +67,7 @@ function processTz(tzName) {
   }); // end mongo collection
 }
 
-var url = require('url').parse(process.env.MONGOHQ_URL || "mongodb://127.0.0.1:27017");
-var db = new mongo.Db(config.mongo.db_name, new mongo.Server(url.hostname, parseInt(url.port), {}));
-db.open(function(err, conn) {
-//mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
+mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
   if (err) throw err;
   connection = conn;
 
@@ -93,6 +90,6 @@ db.open(function(err, conn) {
     }
   }
 
-  closefn = _.after(n, function close() { db.close(); });
+  closefn = _.after(n, function close() { conn.close(); });
 }); // end mongo connection
 
