@@ -4,6 +4,7 @@ var express = require('express')
   , mongo = require('mongodb')
   , connect = require('connect')
   , validator = require('validator')
+  , mailer = require('mailer')
 
 // Express config
 app.set('views', __dirname + '/views');

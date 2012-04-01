@@ -6,9 +6,9 @@ var mongo = require('mongodb')
   , time = require('time')
   , util = require('util')
   , _ = require('underscore')
+  , mailer = require('mailer')
   , tzdata = require('./tzdata.js')
   , config = require('./config.js')
-  , mailer = require('mailer')
 
 var closefn;
 var connection = null;
