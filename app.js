@@ -5,6 +5,7 @@ var express = require('express')
   , connect = require('connect')
   , validator = require('validator')
   , mailer = require('mailer')
+  , config = require('./config.js')
 
 // Express config
 app.set('views', __dirname + '/views');
