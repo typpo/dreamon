@@ -66,6 +66,33 @@ app.post('/signup', function(req, res) {
 
 });
 
+app.post('/parse', function(req, res) {
+  var to = req.body.to;
+  var text = req.body.text;
+
+  console.log('Got email from', to);
+
+  mailer.send({
+      host : "smtp.sendgrid.net",
+      port : "587",
+      domain : "keepdream.me",
+      to : 'typppo@gmail.com',
+      from : 'test@keepdream.me',
+      subject: 'got a posted email',
+      body: to + '\r\n\r\n' + text,
+      authentication : "login",
+      username : config.sendgrid.user,
+      password : config.sendgrid.key,
+    },
+    function(err, result){
+      if(err){
+        console.log(err, result);
+      }
+  });
+
+  res.send('');
+});
+
 
 var port = process.env.PORT || 8080;
 app.listen(port, function() {

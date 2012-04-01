@@ -5,12 +5,13 @@
 var mongo = require('mongodb')
   , time = require('time')
   , util = require('util')
+  , _ = require('underscore')
   , tzdata = require('./tzdata.js')
   , config = require('./config.js')
-  , SendGrid = require('sendgrid').SendGrid;
+  , mailer = require('mailer')
 
+var closefn;
 var connection = null;
-var sendgrid = new SendGrid(config.sendgrid.user, config.sendgrid.key);
 
 // Figure out where it's between 3 and 4am right now
 
@@ -21,41 +22,51 @@ function timeToSend(t) {
 
 function processTz(tzName) {
   connection.collection('dreams', function(err, collection) {
-    if (err) return;
+    if (err) { closefn(); return; };
     collection.find({tz:tzName}, function(err, cursor) {
-      if (err) return;
+      if (err) { closefn(); return; };
       cursor.toArray(function(err, items) {
-        if (err) return;
+        if (err) { closefn(); return; };
         for (var i=0; i < items.length; i++) {
           var person = items[i];
 
           console.log('Mailing', person.email, 'from', person.tz);
 
-          var tmpl = 'Good morning!\r\n\r\nRespond to this email with last night\'s dreams.\r\n\r\n'
-            + 'View your past dreams: %s\r\n\r\n'
+          var tmpl = 'Good morning!\r\n\r\nRespond to this email with last night\'s dreams and we\'ll record them for you..\r\n\r\n'
+            + 'Sincerely,\r\nDreamOn (%s)\r\n\r\n'
+            + 'View past dreams: %s | '
             + 'Unsubscribe: %s\r\n\r\n'
-            + 'Sincerely,\r\nDreamOn\r\n%s';
 
           var text = util.format(tmpl,
+            config.APP_BASE_URL,
             config.APP_BASE_URL + 'view/' + person._id,
-            config.APP_BASE_URL + 'unsub/' + person._id,
-            config.APP_BASE_URL);
+            config.APP_BASE_URL + 'unsub/' + person._id
+          );
 
-          sendgrid.send({
-              to: person.email,
-              from: 'DreamOn <' + person._id + '@dreamon.herokuapp.com>',
+          mailer.send({
+              host : "smtp.sendgrid.net",
+              port : "587",
+              domain : "keepdream.me",
+              to : person.email,
+              from : '"Dream On" <' + person._id + '@keepdream.me',
               subject: 'Remember Your Dreams: respond when you wake up!',
-              text: text
-          }, function(success, obj) {
-            if (!success) {
-              console.log(obj)
-            }
+              body: text,
+              authentication : "login",
+              username : config.sendgrid.user,
+              password : config.sendgrid.key,
+            },
+            function(err, result){
+              if(err){
+                console.log(err, result);
+              }
           });
         }
+        closefn();
       });
     }); // end mongo find
   }); // end mongo collection
 }
+
 var url = require('url').parse(process.env.MONGOHQ_URL || "mongodb://127.0.0.1:27017");
 var db = new mongo.Db('dreams', new mongo.Server(url.hostname, parseInt(url.port), {}));
 db.open(function(err, conn) {
@@ -64,6 +75,7 @@ db.open(function(err, conn) {
   connection = conn;
 
   // check all the times
+  var n = 0;
   for(var i=0; i < tzdata.names.length; i++) {
     var name = tzdata.names[i];
     // get time for this offset
@@ -77,8 +89,10 @@ db.open(function(err, conn) {
       // execute job for these places!
       console.log('Time to send in', name);
       processTz(name);
+      n++;
     }
   }
-  db.close();
+
+  closefn = _.after(n, function close() { db.close(); });
 }); // end mongo connection
 
