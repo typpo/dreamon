@@ -17,7 +17,7 @@ var connection = null;
 
 function timeToSend(t) {
   if (!t) return false;
-  return t.getHours() == 22;
+  return t.getHours() == 3;
 }
 
 function processTz(tzName) {
