@@ -33,7 +33,7 @@ function processTz(tzName) {
           console.log('Mailing', person.email, 'from', person.tz);
 
           var tmpl = 'Good morning!\r\n\r\nRespond to this email with last night\'s dreams and we\'ll record them for you..\r\n\r\n'
-            + 'Sincerely,\r\nDreamOn (%s)\r\n\r\n'
+            + 'Sincerely,\r\nKeepDream (%s)\r\n\r\n'
             + 'View past dreams: %s | '
             + 'Unsubscribe: %s\r\n\r\n'
 
@@ -48,7 +48,7 @@ function processTz(tzName) {
               port : "587",
               domain : "keepdream.me",
               to : person.email,
-              from : '"Dream On" <' + person._id + '@keepdream.me',
+              from : '"KeepDream" <' + person._id + '@keepdream.me',
               subject: 'Remember Your Dreams: respond when you wake up!',
               body: text,
               authentication : "login",

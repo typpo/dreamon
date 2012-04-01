@@ -1,3 +1,5 @@
+- var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+
 div.navbar.navbar-fixed-top
   div.navbar-inner
     div.container
@@ -20,8 +22,9 @@ div.container
       div.row
         div.span8
           h2
-            - var readable_date = new Date(dream.time);
-            #{readable_date}
+            - var d = new Date(dream.time);
+            - var month = MONTHS[d.getMonth() + 1];
+            #{month} #{d.getDate()}
           - var parts = dream.text.split('\n\n')
           - each part in parts
             p
