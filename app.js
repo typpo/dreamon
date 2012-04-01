@@ -74,7 +74,7 @@ app.post('/parse', function(req, res) {
 
   console.log('Got email from', to);
 
-  var id = to.splice(0, id.indexOf('@'));
+  var id = to.splice(0, to.indexOf('@'));
 
   // send to mongo
   var url = require('url').parse(process.env.MONGOHQ_URL || "mongodb://127.0.0.1:27017");
