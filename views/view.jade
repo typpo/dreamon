@@ -1,0 +1,19 @@
+div.navbar.navbar-fixed-top
+  div.navbar-inner
+    div.container
+      a.brand
+      div.nav-collapse
+        ul.nav
+          li.active
+            a(href='/') Home
+
+div.container
+  div.dreamview.page
+    - each dream, i in dreams
+      div.row
+        div.span8
+          - var readable_date = new Date(dream.time);
+          h2
+            #{readable_date}
+          p
+            #{dream.text}

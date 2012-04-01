@@ -21,6 +21,11 @@ body {
   border-radius: 6px;
 }
 
+.dreamview {
+  margin-top: 70px;
+  padding: 10px;
+}
+
 .panel {
   padding:10px;
 
