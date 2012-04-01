@@ -199,8 +199,8 @@ app.post('/parse', function(req, res) {
   res.send('');
 });
 
-function gotemail(to, text) {
-  console.log('Got email from', to);
+function gotemail(to, text, from) {
+  console.log('Got email to', to, 'from', from);
   // send to mongo
   var startidx = Math.max(to.indexOf('<')+1, 0);
   var id = to.slice(startidx, to.indexOf('@'));
