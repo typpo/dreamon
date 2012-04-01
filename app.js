@@ -43,7 +43,7 @@ app.post('/signup', function(req, res) {
 
   // send to mongo
   var url = require('url').parse(process.env.MONGOHQ_URL || "mongodb://127.0.0.1:27017");
-  var db = new mongo.Db('keepdream', new mongo.Server(url.hostname, parseInt(url.port), {}));
+  var db = new mongo.Db(config.mongo.db_name, new mongo.Server(url.hostname, parseInt(url.port), {}));
   db.open(function(err, conn) {
     if (err) {
       res.send({success: false, msg: 'Could not connect to database.'});
@@ -78,7 +78,7 @@ app.post('/parse', function(req, res) {
 
   // send to mongo
   var url = require('url').parse(process.env.MONGOHQ_URL || "mongodb://127.0.0.1:27017");
-  var db = new mongo.Db('keepdream', new mongo.Server(url.hostname, parseInt(url.port), {}));
+  var db = new mongo.Db(config.mongo.db_name, new mongo.Server(url.hostname, parseInt(url.port), {}));
   db.open(function(err, conn) {
     if (err) {
       return;

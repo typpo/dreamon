@@ -17,7 +17,7 @@ var connection = null;
 
 function timeToSend(t) {
   if (!t) return false;
-  return t.getHours() == 21;
+  return t.getHours() == 22;
 }
 
 function processTz(tzName) {
@@ -68,7 +68,7 @@ function processTz(tzName) {
 }
 
 var url = require('url').parse(process.env.MONGOHQ_URL || "mongodb://127.0.0.1:27017");
-var db = new mongo.Db('keepdream', new mongo.Server(url.hostname, parseInt(url.port), {}));
+var db = new mongo.Db(config.mongo.db_name, new mongo.Server(url.hostname, parseInt(url.port), {}));
 db.open(function(err, conn) {
 //mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
   if (err) throw err;
