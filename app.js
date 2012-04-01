@@ -201,7 +201,26 @@ app.post('/parse', function(req, res) {
 function gotemail(to, text) {
   console.log('Got email from', to);
   // send to mongo
-  var id = to.slice(0, to.indexOf('@'));
+  var startidx = Math.max(to.indexOf('<')+1, 0);
+  var id = to.slice(startidx, to.indexOf('@'));
+
+  // cut off text so we don't record original email
+  var lines = text.split('\r\n');
+  if (lines.length == 1)
+    text.split('\n');
+
+  var includelines = [];
+  for (var i=0; i < lines.length; i++) {
+    var line = lines[i];
+    //if (line.length > 0 && line[0] == '<')
+      //break;
+    if (line.indexOf(id) > -1)
+      break;
+    includelines.push(line);
+  }
+  text = includelines.join('\n');
+
+
   mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
     if (err) {
       return;
@@ -212,7 +231,7 @@ function gotemail(to, text) {
       }
 
       collection.insert({unique:id, text:text, time:new Date().getTime()}, function(err) {
-        console.log('Recorded dream', id);
+        console.log('Recorded dream', id, text);
       });
     }); // end mongo collection
   }); // end mongo connection
@@ -221,5 +240,6 @@ function gotemail(to, text) {
 var port = process.env.PORT || 8080;
 app.listen(port, function() {
   console.log('Listening on', port);
-
 });
+
+gotemail('Dream On <123456@keepdream.me>', 'chicken\r\n\r\nnoodle soup\r\n\r\nYesterday, 123456 wrote:\r\nyo this shouldnt be incclclululdedd');

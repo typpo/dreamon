@@ -19,8 +19,10 @@ div.container
     - each dream, i in dreams
       div.row
         div.span8
-          - var readable_date = new Date(dream.time);
           h2
+            - var readable_date = new Date(dream.time);
             #{readable_date}
-          p
-            #{dream.text}
+          - var parts = dream.text.split('\n')
+          - each part in parts
+            p
+              #{part}
