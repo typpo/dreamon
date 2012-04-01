@@ -41,3 +41,18 @@ body {
   border: 1px solid;
 
 }
+
+.bottom {
+  position:absolute;
+  bottom:0px;
+  right:0px;
+  height:25px;
+  width: 125px;
+  background-color: #ccc;
+  padding-top: 5px;
+  text-align: center;
+
+  -moz-border-radius: 6px;
+  -webkit-border-radius:6px;
+  border-radius: 6px;
+}

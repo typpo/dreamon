@@ -189,6 +189,24 @@ app.get('/unsub/:id', function(req, res) {
   });
 });
 
+/* Feedback */
+app.post('/feedback', function(req, res) {
+  var text = req.body.text;
+  mailer.send({
+    host : "smtp.sendgrid.net",
+    port : "587",
+    domain : "keepdream.me",
+    to : 'typppo@gmail.com',
+    from : '"Feedback" feedback@keepdream.me',
+    subject: 'KeepDream feedback',
+    body: text,
+    authentication : "login",
+    username : config.sendgrid.user,
+    password : config.sendgrid.key,
+  }, function() {});
+  res.send('');
+});
+
 /* Received an email */
 app.post('/parse', function(req, res) {
   var to = req.body.to;

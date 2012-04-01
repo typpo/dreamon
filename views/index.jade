@@ -1,5 +1,11 @@
 div.container
   div.page
+    div(style='float:right;margin-right:15px;margin-top:30px;')
+      span
+        a(href='javascript:$("#about-modal").modal()') About
+      |  |
+      span
+        a(href='javascript:$("#feedback-modal").modal()') Feedback
     div.row(style='padding-top:30px;padding-left:15px;')
       div.span10
         p(style='font-size:35px; font-weight:bold;') The easy, natural way to remember your dreams.
@@ -32,3 +38,23 @@ div#success-modal.modal(style='display:none;')
     p#success-body
   div.modal-footer
     a.btn.btn-primary(data-dismiss='modal') Close
+
+div#about-modal.modal(style='display:none;')
+  div.modal-header
+    a.close(data-dismiss='modal') ×
+    h2 About
+  div.modal-body
+    p <a href="http://www.ianww.com/">Ian Webster</a> is a bored engineer in Mountain View.
+  div.modal-footer
+    a.btn.btn-primary(data-dismiss='modal') Close
+
+div#feedback-modal.modal(style='display:none;')
+  div.modal-header
+    a.close(data-dismiss='modal') ×
+    h2 About
+  div.modal-body
+    p
+      textarea.xlarge(rows=5, cols=80, style='width:500px')#feedback
+  div.modal-footer
+    a#submit-feedback.btn.btn-primary(data-dismiss='modal') Submit
+    a.btn(data-dismiss='modal') Close
