@@ -199,7 +199,7 @@ app.post('/parse', function(req, res) {
   res.send('');
 });
 
-function gotemail(to, text, from) {
+function gotemail(to, from, text) {
   console.log('Got email to', to, 'from', from);
   // send to mongo
   var startidx = Math.max(to.indexOf('<')+1, 0);
