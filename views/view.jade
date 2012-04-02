@@ -23,7 +23,8 @@ div.container
         div.span8
           h2
             - var d = new Date(dream.time);
-            - var month = MONTHS[d.getMonth() + 1];
+            - d.setDate(d.getDate()-1);
+            - var month = MONTHS[d.getMonth()];
             #{month} #{d.getDate()}
           - var parts = dream.text.split('\n\n')
           - each part in parts
