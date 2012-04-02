@@ -34,3 +34,18 @@ body {
   padding-top: 10px;
   margin-bottom: 15px;
 }
+
+ol li {
+  margin-bottom: 30px;
+  line-height: 0.1em;
+}
+
+ol {
+  font-size: 35px;
+  font-weight: bold;
+}
+
+ol span {
+font-size:18px; font-weight:200;
+vertical-align: text-top;
+}
