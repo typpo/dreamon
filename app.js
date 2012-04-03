@@ -238,6 +238,11 @@ function gotemail(to, from, text) {
   // This is because the 'original message' line may be separated, and
   // we need to kill it.
   if (lines.length == 1) {
+    lines = text.split('\n');
+
+  }
+  /*
+  if (lines.length == 1) {
     dreamtext = text.replace('\n\n', '<{{double}}>').replace('\n', ' ');
     lines = dreamtext.split('<{{double}}>');
   }
@@ -245,13 +250,14 @@ function gotemail(to, from, text) {
     dreamtext = text.replace('\r\n\r\n', '<{{double}}>').replace('\r\n', ' ');
     lines = dreamtext.split('<{{double}}>');
   }
+  */
 
   var includelines = [];
   for (var i=0; i < lines.length; i++) {
     var line = lines[i];
     //if (line.length > 0 && line[0] == '<')
       //break;
-    if (line.indexOf(id) > -1 || line.indexOf(from) > -1) {
+    if (line.indexOf(id) > -1 || line.indexOf(from) > -1 || line.indexOf('KeepDream') > -1) {
       break;
     }
     includelines.push(line);
