@@ -159,6 +159,10 @@ app.get('/download/:id', function(req, res) {
 
 /* Unsubscribe */
 app.get('/unsub/:id', function(req, res) {
+  res.send('<h1><a href="/confirm_unsub/' + req.params.id + '">Confirm Unsubscribe</a></h1>');
+});
+
+app.get('/confirm_unsub/:id', function(req, res) {
   mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
     if (err) {
       res.send('Sorry, something went wrong. Please email iwmiscs@gmail.com to unsubscribe :(.');
