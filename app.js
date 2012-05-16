@@ -12,8 +12,6 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 app.use(express.cookieParser());
-//var RedisStore = require('connect-redis')(express);
-//app.use(express.session({secret: "some key", store: new RedisStore}));
 app.use(express.static(__dirname + '/public'));
 app.use(express.bodyParser());
 app.use(connect.compress());
@@ -228,15 +226,6 @@ function gotemail(to, from, text) {
   var id = to.slice(startidx, to.indexOf('@'));
 
   // cut off text so we don't record original email
-
-  /*
-  var responseidx = text.indexOf(id);
-  var dreamtext = text;
-  if (responseidx > -1) {
-    dreamtext = dreamtext.slice(0, responseidx);
-  }
-  */
-
   var lines = text.split('\r\n');
   // We have to join lines that are separated by only one break.
   // This is because the 'original message' line may be separated, and
@@ -245,16 +234,6 @@ function gotemail(to, from, text) {
     lines = text.split('\n');
 
   }
-  /*
-  if (lines.length == 1) {
-    dreamtext = text.replace('\n\n', '<{{double}}>').replace('\n', ' ');
-    lines = dreamtext.split('<{{double}}>');
-  }
-  else {
-    dreamtext = text.replace('\r\n\r\n', '<{{double}}>').replace('\r\n', ' ');
-    lines = dreamtext.split('<{{double}}>');
-  }
-  */
 
   var includelines = [];
   for (var i=0; i < lines.length; i++) {
@@ -293,5 +272,3 @@ var port = process.env.PORT || 8080;
 app.listen(port, function() {
   console.log('Listening on', port);
 });
-
-//gotemail('testing@keepdream.me', 'testing@keepdream.me', "another fucking test\n\nOn Sun, Apr 1, 2012 at 3:32 AM, Dream On <\ntesting@keepdream.me> wrote:\n\n> Good morning!\n>\n> Respond to this email with last night's dreams and we'll record them for\n> you..\n>\n> Sincerely, DreamOn (http://keepdream.me/<http://sendgrid.me/wf/click?upn=AOmug9hCKjQuzHKl3XnuRu5tmj1qOBjfYJS4azSHcWg-3D_KBjE5m2On0IpDgCIYtH3RScXLla6hTkfw1BythzQ8nqnc84aGuwrHOfHSkdZHZYxV6ojB1fpdS5LsOm1jU8GOO7r-2BrPmJQ2ws178X9maCIaJaYY1G5HVQBhwx-2BAmFRAdB8keFkYHCuQ-2BqStlEnC1BA-3D-3D>\n> )\n>\n> View past dreams: http://keepdream.me/view/4f77ed3860c258a567aeabf8<http://sendgrid.me/wf/click?upn=AOmug9hCKjQuzHKl3XnuRru5Yfa-2FZdfrkTI2NHJQcbca7oMRD-2FHeUC3wRGLMiDLzjmLCHa9LqmXt-2Fnqc19iE4w-3D-3D_KBjE5m2On0IpDgCIYtH3RScXLla6hTkfw1BythzQ8nqnc84aGuwrHOfHSkdZHZYxuzuIS4-2BdCLUQWLoEaQFXmrQmbkSzcuuzBQKPxdIbhjmBPeXc9EEE7J7TnobJyEkt19pCtAsnfPguYCM-2FLJF-2BXQ-3D-3D>| Unsubscribe:\n> http://keepdream.me/unsub/4f77ed3860c258a567aeabf8<http://sendgrid.me/wf/click?upn=AOmug9hCKjQuzHKl3XnuRq4j3DzOkPdOTChpM0m11RZHXBAY7YaR21khrKmcun5l6qW8j0nnakPtIq4vt9ei4w-3D-3D_KBjE5m2On0IpDgCIYtH3RScXLla6hTkfw1BythzQ8nqnc84aGuwrHOfHSkdZHZYx-2BjuW4ia8bNy94JLSVX8GxpqdcwxAtBvuN-2BhlK6T2cRkbl3yobgZP8ynj55ocplmSTTkgMhdTxhrw-3D-3D>\n>\n");
