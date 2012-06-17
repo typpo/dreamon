@@ -12,8 +12,6 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 app.use(express.cookieParser());
-//var RedisStore = require('connect-redis')(express);
-//app.use(express.session({secret: "some key", store: new RedisStore}));
 app.use(express.static(__dirname + '/public'));
 app.use(express.bodyParser());
 app.use(connect.compress());
@@ -159,6 +157,10 @@ app.get('/download/:id', function(req, res) {
 
 /* Unsubscribe */
 app.get('/unsub/:id', function(req, res) {
+  res.send('<h1><a href="/confirm_unsub/' + req.params.id + '">Confirm Unsubscribe</a></h1>');
+});
+
+app.get('/confirm_unsub/:id', function(req, res) {
   mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
     if (err) {
       res.send('Sorry, something went wrong. Please email iwmiscs@gmail.com to unsubscribe :(.');
@@ -224,15 +226,6 @@ function gotemail(to, from, text) {
   var id = to.slice(startidx, to.indexOf('@'));
 
   // cut off text so we don't record original email
-
-  /*
-  var responseidx = text.indexOf(id);
-  var dreamtext = text;
-  if (responseidx > -1) {
-    dreamtext = dreamtext.slice(0, responseidx);
-  }
-  */
-
   var lines = text.split('\r\n');
   // We have to join lines that are separated by only one break.
   // This is because the 'original message' line may be separated, and
@@ -241,17 +234,6 @@ function gotemail(to, from, text) {
     lines = text.split('\n');
 
   }
-  /*
-  if (lines.length == 1) {
-    dreamtext = text.replace('\n\n', '<{{double}}>').replace('\n', ' ');
-    lines = dreamtext.split('<{{double}}>');
-  }
-  else {
-    dreamtext = text.replace('\r\n\r\n', '<{{double}}>').replace('\r\n', ' ');
-    lines = dreamtext.split('<{{double}}>');
-  }
-  */
-
   var includelines = [];
   for (var i=0; i < lines.length; i++) {
     var line = lines[i];
