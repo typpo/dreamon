@@ -37,15 +37,16 @@ body {
 
 ol li {
   margin-bottom: 30px;
-  line-height: 0.1em;
 }
 
 ol {
-  font-size: 35px;
+  font-size: 18px;
   font-weight: bold;
 }
 
 ol span {
 font-size:18px; font-weight:200;
 vertical-align: text-top;
+display: block;
+line-height: 1.2em;
 }
