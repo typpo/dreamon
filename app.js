@@ -205,7 +205,9 @@ app.post('/feedback', function(req, res) {
     authentication : "login",
     username : config.sendgrid.user,
     password : config.sendgrid.key,
-  }, function() {});
+  }, function(err, result) {
+    console.log(err, result);
+  });
   res.send('');
 });
 
