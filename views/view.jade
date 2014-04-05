@@ -25,7 +25,8 @@ div.container
             - var d = new Date(dream.time);
             - d.setDate(d.getDate()-1);
             - var month = MONTHS[d.getMonth()];
-            #{month} #{d.getDate()}
+            - var year = 1900 + d.getYear();
+            #{month} #{d.getDate()}, #{year}
           - var parts = dream.text.split('\n\n')
           - each part in parts
             p
