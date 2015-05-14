@@ -52,8 +52,10 @@ function processTz(tzName) {
               subject: 'Remember Your Dreams: respond when you wake up!',
               body: text,
               authentication : "login",
-              username : config.sendgrid.user,
-              password : config.sendgrid.key,
+              //username : config.sendgrid.user,
+              //password : config.sendgrid.key,
+              username : process.env['SENDGRID_USERNAME'],
+              password : process.env['SENDGRID_PASSWORD'],
             },
             function(err, result){
               if(err){
