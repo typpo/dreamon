@@ -8,7 +8,10 @@ var mongo = require('mongodb')
   , _ = require('underscore')
   , mailer = require('mailer')
   , tzdata = require('./tzdata.js')
-  , config = require('./config.js')
+//  , config = require('./config.js')
+var config = {
+  APP_BASE_URL: 'http://keepdream.me/',
+};
 
 var closefn;
 var connection = null;
