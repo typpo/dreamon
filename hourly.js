@@ -25,13 +25,13 @@ function timeToSend(t) {
 
 function processTz(tzName) {
   connection.collection('people', function(err, collection) {
-    console.log('collection', err, collection);
     if (err) { closefn(); return; };
     collection.find({tz:tzName}, function(err, cursor) {
-      console.log('cursor', err, cursor);
       if (err) { closefn(); return; };
       cursor.toArray(function(err, items) {
-        console.log('items', err, items);
+        if (err || items) {
+          console.log('items', err, items);
+        }
         if (err) { closefn(); return; };
         for (var i=0; i < items.length; i++) {
           var person = items[i];
