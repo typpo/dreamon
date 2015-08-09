@@ -54,7 +54,7 @@ function processTz(tzName) {
               port : "587",
               domain : "keepdream.me",
               to : person.email,
-              from : '"KeepDream" <' + person._id + '@keepdream.me',
+              from : '"KeepDream" <' + person._id + '@keepdream.me>',
               subject: 'Remember Your Dreams: respond when you wake up!',
               body: text,
               authentication : "login",
