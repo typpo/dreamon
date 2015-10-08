@@ -93,6 +93,7 @@ app.get('/view/:id', function(req, res) {
             return;
           }
           if ('dl' in req.query)  {
+            res.writeHead(200, {'Content-Type': 'application/json'});
             res.send(JSON.stringify(items));
           }
           else if ('drop' in req.query) {
