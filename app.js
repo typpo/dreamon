@@ -31,10 +31,7 @@ app.post('/signup', function(req, res) {
   var tz = req.body.tz;
 
   // check email
-  try {
-    validator.check(email).isEmail();
-  }
-  catch(ex) {
+  if (!validator.isEmail(email)) {
     res.send({success: false, msg: 'Invalid email.'});
     return;
   }
