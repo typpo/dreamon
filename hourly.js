@@ -75,7 +75,7 @@ function processTz(tzName) {
   }); // end mongo collection
 }
 
-mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
+mongo.connect(process.env.MONGOLAB_URL || "mongodb://localhost:27017", function(err, conn) {
   if (err) throw err;
   connection = conn;
 

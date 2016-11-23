@@ -37,7 +37,7 @@ app.post('/signup', function(req, res) {
   }
 
   // send to mongo
-  mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
+  mongo.connect(process.env.MONGOLAB_URL || "mongodb://localhost:27017", function(err, conn) {
     if (err) {
       res.send({success: false, msg: 'Could not connect to database.'});
       return;
@@ -68,7 +68,7 @@ app.get('/view/:id', function(req, res) {
     res.send(txt || 'Sorry, something went wrong. :(.');
   }
 
-  mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
+  mongo.connect(process.env.MONGOLAB_URL || "mongodb://localhost:27017", function(err, conn) {
     if (err) {
       fail();
       return;
@@ -123,7 +123,7 @@ app.get('/download/:id', function(req, res) {
     res.send(txt || 'Sorry, something went wrong. :(.');
   }
 
-  mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
+  mongo.connect(process.env.MONGOLAB_URL || "mongodb://localhost:27017", function(err, conn) {
     if (err) {
       fail();
       return;
@@ -159,7 +159,7 @@ app.get('/unsub/:id', function(req, res) {
 });
 
 app.get('/confirm_unsub/:id', function(req, res) {
-  mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
+  mongo.connect(process.env.MONGOLAB_URL || "mongodb://localhost:27017", function(err, conn) {
     if (err) {
       res.send('Sorry, something went wrong. Please email iwmiscs@gmail.com to unsubscribe :(.');
       return;
@@ -248,7 +248,7 @@ function gotemail(to, from, text) {
   }
   dreamtext = includelines.join('\n');
 
-  mongo.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017", function(err, conn) {
+  mongo.connect(process.env.MONGOLAB_URL || "mongodb://localhost:27017", function(err, conn) {
     if (err) {
       return;
     }
