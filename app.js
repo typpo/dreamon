@@ -70,22 +70,26 @@ app.get('/view/:id', function(req, res) {
 
   mongo.connect(process.env.MONGOLAB_URL || "mongodb://localhost:27017", function(err, conn) {
     if (err) {
+      console.log('could not connect to mongo at', process.env.MONGOLAB_URL);
       fail();
       return;
     }
     conn.collection('dreams', function(err, collection) {
       if (err) {
+        console.log('could not load dreams collection');
         fail();
         return;
       }
 
       collection.find({unique:req.params.id}, function(err, cursor) {
         if (err) {
+          console.log('could not find id', req.params.id);
           fail();
           return;
         }
         cursor.sort({time:-1}).toArray(function(err, items) {
           if (err) {
+            console.log('could not convert to array', req.params.id);
             fail();
             return;
           }
@@ -125,7 +129,7 @@ app.get('/download/:id', function(req, res) {
 
   mongo.connect(process.env.MONGOLAB_URL || "mongodb://localhost:27017", function(err, conn) {
     if (err) {
-      console.log(process.env.MONGOLAB_URL);
+      console.log('could not connect to mongo at', process.env.MONGOLAB_URL);
       fail();
       return;
     }
