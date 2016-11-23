@@ -70,7 +70,7 @@ app.get('/view/:id', function(req, res) {
 
   mongo.connect(process.env.MONGOLAB_URL || "mongodb://localhost:27017", function(err, conn) {
     if (err) {
-      console.log('could not connect to mongo at', process.env.MONGOLAB_URL);
+      console.log('could not connect to mongo at', process.env.MONGOLAB_URL, err);
       fail();
       return;
     }
@@ -129,7 +129,7 @@ app.get('/download/:id', function(req, res) {
 
   mongo.connect(process.env.MONGOLAB_URL || "mongodb://localhost:27017", function(err, conn) {
     if (err) {
-      console.log('could not connect to mongo at', process.env.MONGOLAB_URL);
+      console.log('could not connect to mongo at', process.env.MONGOLAB_URL, err);
       fail();
       return;
     }
