@@ -4,7 +4,7 @@
     "express": "2.5.2",
     "jade": "0.14.2",
     "underscore": "latest",
-    "mongodb": "^2.2.36",
+    "mongodb": "^3.1.13",
     "connect": "2.x",
     "validator": "latest",
     "time": "latest",
