@@ -1,18 +1,19 @@
 {
-    "name": "App"
-  , "dependencies": {
-      "express": "2.5.2"
-      , "jade": "0.14.2"
-      , "underscore": "latest"
-      , "mongodb": "~2.2.11"
-      , "connect": "2.x"
-      , "validator": "latest"
-      , "time": "latest"
-      , "mailer": "latest"
-    }
-  , "devDependencies": {
-    }
-  , "main": "app"
-  , "engines": { "node": "~7.1.0" }
-  , "version": "0.0.1"
+  "name": "App",
+  "dependencies": {
+    "express": "2.5.2",
+    "jade": "0.14.2",
+    "underscore": "latest",
+    "mongodb": "^2.2.36",
+    "connect": "2.x",
+    "validator": "latest",
+    "time": "latest",
+    "mailer": "latest"
+  },
+  "devDependencies": {},
+  "main": "app",
+  "engines": {
+    "node": "~7.1.0"
+  },
+  "version": "0.0.1"
 }

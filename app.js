@@ -83,13 +83,13 @@ app.get('/view/:id', function(req, res) {
 
       collection.find({unique:req.params.id}, function(err, cursor) {
         if (err) {
-          console.log('could not find id', req.params.id);
+          console.error('could not find id', req.params.id, err);
           fail();
           return;
         }
         cursor.sort({time:-1}).toArray(function(err, items) {
           if (err) {
-            console.log('could not convert to array', req.params.id);
+            console.error('could not convert to array', req.params.id, err);
             fail();
             return;
           }
