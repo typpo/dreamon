@@ -7,13 +7,14 @@ const express = require('express')
 
 const multer = require('multer');
 
+const upload = multer();
+
 // Express config
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 //app.use(express.json());
 //app.use(express.urlencoded({ extended: false }));
-app.use(multer());
 app.use(express.static(__dirname + '/public'));
 
 // MongoDB connection
@@ -169,7 +170,7 @@ app.post('/feedback', async function(req, res) {
 });
 
 /* Received an email */
-app.post('/parse', async function(req, res) {
+app.post('/parse', upload.none(), async function(req, res) {
   console.log('/parse request body:', req.body);
   var to = req.body.to;
   var from = req.body.from;
