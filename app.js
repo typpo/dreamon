@@ -13,19 +13,32 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(__dirname + '/public'));
 
+// MongoDB connection
+const url = process.env.MONGOLAB_URL || "mongodb://localhost:27017";
+const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
+const dbName = 'heroku_454v0pff';
+let db;
+
+(async function() {
+  try {
+    await client.connect();
+    db = client.db(dbName);
+  } catch (err) {
+    console.error('Error:', err);
+  }
+})();
+
 // App
 
 /* Homepage */
 app.get('/', function(req, res) {
-  res.render('index', {
-
-  });
+  res.render('index', { });
 });
 
 /* New signup */
 app.post('/signup', async function(req, res) {
-  var email = req.body.email;
-  var tz = req.body.tz;
+  const email = req.body.email;
+  const tz = req.body.tz;
 
   // check email
   if (!validator.isEmail(email)) {
@@ -35,18 +48,7 @@ app.post('/signup', async function(req, res) {
 
   // send to mongo
   try {
-    const url = process.env.MONGOLAB_URL || "mongodb://localhost:27017";
-    const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
-
-    await client.connect();
-
-    const dbName = 'heroku_454v0pff';
-    const db = client.db(dbName);
     const collection = db.collection('people');
-
-    const email = 'example@email.com'; // Replace with your email value
-    const tz = 'example-tz'; // Replace with your tz value
-
     await collection.updateOne(
       { email: email },
       { $set: { email: email, tz: tz } },
@@ -56,78 +58,57 @@ app.post('/signup', async function(req, res) {
     console.log('Update successful');
   } catch (err) {
     console.error('Error:', err);
-  } finally {
-    client.close();
   }
 });
 
 /* View dreams */
 app.get('/view/:id', async function (req, res) {
-  function fail(txt) {
-    res.send(txt || 'Sorry, something went wrong. :(.');
-  }
+  const collection = db.collection('dreams');
+  const id = req.params.id;
+  const query = { unique: id };
 
-  try {
-    const url = process.env.MONGOLAB_URL || 'mongodb://localhost:27017';
-    const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
-
-    await client.connect();
-
-    const dbName = 'heroku_454v0pff';
-    const db = client.db(dbName);
-    const collection = db.collection('dreams');
-
-    const cursor = await collection.find({ unique: req.params.id });
-    const items = await cursor.sort({ time: -1 }).toArray();
-
-    if ('dl' in req.query) {
-      res.setHeader('Content-Type', 'application/json');
-      res.send(JSON.stringify(items));
-    } else if ('drop' in req.query) {
-      res.send(
-        '<a href="/view/' + req.params.id + '?reallydrop">Click here to delete your dream log.  This is permanent.</a>'
-      );
-    } else if ('reallydrop' in req.query) {
-      await collection.deleteOne({ unique: req.params.id });
-      res.send('ok');
-    } else {
-      res.render('view', {
-        dreams: items,
-      });
-    }
-  } catch (err) {
-    console.error('Error:', err);
-    fail();
-  }
+  const items = await findItems(collection, query);
+  handleViewResponse(req, res, items);
 });
 
 /* Download dreams */
 app.get('/download/:id', async function (req, res) {
-  function fail(txt) {
-    res.send(txt || 'Sorry, something went wrong. :(.');
-  }
+  const collection = db.collection('dreams');
+  const id = req.params.id;
+  const query = { unique: id };
 
+  const items = await findItems(collection, query);
+  res.render('view', { dreams: items });
+});
+
+async function findItems(collection, query) {
   try {
-    const url = process.env.MONGOLAB_URL || 'mongodb://localhost:27017';
-    const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
+    const cursor = await collection.find(query);
+    return await cursor.sort({ time: -1 }).toArray();
+  } catch (err) {
+    console.error('Error:', err);
+    return [];
+  }
+}
 
-    await client.connect();
-
-    const dbName = 'heroku_454v0pff';
-    const db = client.db(dbName);
+function handleViewResponse(req, res, items) {
+  if ('dl' in req.query) {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(items));
+  } else if ('drop' in req.query) {
+    res.send(
+      '<a href="/view/' + req.params.id + '?reallydrop">Click here to delete your dream log.  This is permanent.</a>'
+    );
+  } else if ('reallydrop' in req.query) {
     const collection = db.collection('dreams');
-
-    const cursor = await collection.find({ unique: req.params.id });
-    const items = await cursor.sort({ time: -1 }).toArray();
-
+    collection.deleteOne({ unique: req.params.id });
+    res.send('ok');
+  } else {
     res.render('view', {
       dreams: items,
     });
-  } catch (err) {
-    console.error('Error:', err);
-    fail();
   }
-});
+}
 
 /* Unsubscribe */
 app.get('/unsub/:id', function(req, res) {
