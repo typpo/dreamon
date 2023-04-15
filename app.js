@@ -5,12 +5,15 @@ const express = require('express')
   , nodemailer = require('nodemailer')
   , { MongoClient } = require('mongodb');
 
+const bodyParser = require('body-parser');
+
 // Express config
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+//app.use(express.json());
+//app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser());
 app.use(express.static(__dirname + '/public'));
 
 // MongoDB connection
@@ -23,7 +26,6 @@ async function connectToMongo() {
   try {
     await client.connect();
     db = client.db(dbName);
-    setupRoutes();
   } catch (err) {
     console.error('Error:', err);
   }
