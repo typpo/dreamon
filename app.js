@@ -5,7 +5,7 @@ const express = require('express')
   , nodemailer = require('nodemailer')
   , { MongoClient } = require('mongodb');
 
-const bodyParser = require('body-parser');
+const multer = require('multer');
 
 // Express config
 app.set('views', __dirname + '/views');
@@ -13,7 +13,7 @@ app.set('view engine', 'jade');
 
 //app.use(express.json());
 //app.use(express.urlencoded({ extended: false }));
-app.use(bodyParser());
+app.use(multer());
 app.use(express.static(__dirname + '/public'));
 
 // MongoDB connection

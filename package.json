@@ -1,12 +1,12 @@
 {
   "name": "App",
   "dependencies": {
-    "body-parser": "^1.20.2",
     "connect": "^3.7.0",
     "date-fns-tz": "^2.0.0",
     "express": "^4.17.1",
     "jade": "^1.11.0",
     "mongodb": "^4.1.4",
+    "multer": "^1.4.5-lts.1",
     "nodemailer": "6.7.2",
     "underscore": "1.13.1",
     "validator": "13.7.0"
