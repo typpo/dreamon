@@ -52,6 +52,7 @@ app.post('/signup', async function(req, res) {
 
   // send to mongo
   try {
+    await connectToMongo();
     const collection = db.collection('people');
     await collection.updateOne(
       { email: email },
@@ -67,6 +68,7 @@ app.post('/signup', async function(req, res) {
 
 /* View dreams */
 app.get('/view/:id', async function (req, res) {
+  await connectToMongo();
   const collection = db.collection('dreams');
   const id = req.params.id;
   const query = { unique: id };
@@ -77,6 +79,7 @@ app.get('/view/:id', async function (req, res) {
 
 /* Download dreams */
 app.get('/download/:id', async function (req, res) {
+  await connectToMongo();
   const collection = db.collection('dreams');
   const id = req.params.id;
   const query = { unique: id };
@@ -121,6 +124,7 @@ app.get('/unsub/:id', function(req, res) {
 
 app.get('/confirm_unsub/:id', async function(req, res) {
   try {
+    await connectToMongo();
     const url = process.env.MONGOLAB_URL || "mongodb://localhost:27017";
     const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -200,6 +204,7 @@ async function gotemail(to, from, text) {
   const dreamtext = includelines.join('\n');
 
   try {
+    await connectToMongo();
     const url = process.env.MONGOLAB_URL || "mongodb://localhost:27017";
     const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
