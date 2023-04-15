@@ -18,22 +18,18 @@ div.container
       | ,
       a(href='?drop') Delete
 
-    - each dream, i in dreams
+    each dream, i in dreams
       div.row
         div.span8
-          h2
-            - var d = new Date(dream.time);
-            - d.setDate(d.getDate()-1);
-            - var month = MONTHS[d.getMonth()];
-            - var year = 1900 + d.getYear();
-            #{month} #{d.getDate()}, #{year}
+          - var d = new Date(dream.time);
+          h2 #{`${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`}
           - var parts = dream.text.split('\n\n')
-          - each part in parts
+          each part in parts
             p
               - var subparts = part.split('\n')
-              - each subpart in subparts
-                #{subpart}
+              each subpart in subparts
+                | #{subpart}
                 br
 
-script
+script.
   mixpanel.track('view');

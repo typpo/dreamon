@@ -2,102 +2,97 @@
 // This script runs hourly and emails people as necessary
 //
 
-var mongo = require('mongodb')
-  , time = require('time')
-  , util = require('util')
-  , _ = require('underscore')
-  , mailer = require('mailer')
-  , tzdata = require('./tzdata.js')
-//  , config = require('./config.js')
-var config = {
+const { MongoClient } = require('mongodb');
+const { zonedTimeToUtc, utcToZonedTime, format } = require('date-fns-tz');
+const util = require('util');
+const _ = require('underscore');
+const nodemailer = require('nodemailer');
+const tzdata = require('./tzdata.js');
+
+const config = {
   APP_BASE_URL: 'http://keepdream.me/',
 };
 
-var closefn;
-var connection = null;
+let closefn;
+let connection = null;
 
 // Figure out where it's between 3 and 4am right now
 
 function timeToSend(t) {
   if (!t) return false;
-  return t.getHours() == 3;
+  return t.getHours() === 3;
 }
 
-function processTz(tzName) {
-  connection.collection('people', function(err, collection) {
-    if (err) { closefn(); return; };
-    collection.find({tz:tzName}, function(err, cursor) {
-      if (err) { closefn(); return; };
-      cursor.toArray(function(err, items) {
-        if (err || items) {
-          console.log('items', err, items);
-        }
-        if (err) { closefn(); return; };
-        for (var i=0; i < items.length; i++) {
-          var person = items[i];
+async function processTz(tzName) {
+  try {
+    const collection = connection.collection('people');
+    const items = await collection.find({ tz: tzName }).toArray();
 
-          console.log('Mailing', person.email, 'from', person.tz);
+    for (const person of items) {
+      console.log('Mailing', person.email, 'from', person.tz);
 
-          var tmpl = 'Good morning!\r\n\r\nRespond to this email with last night\'s dreams and we\'ll record them for you..\r\n\r\n'
-            + 'Sincerely,\r\nKeepDream (%s)\r\n\r\n'
-            + 'View past dreams: %s | '
-            + 'Unsubscribe: %s\r\n\r\n'
+      const tmpl = `Good morning!
 
-          var text = util.format(tmpl,
-            config.APP_BASE_URL,
-            config.APP_BASE_URL + 'view/' + person._id,
-            config.APP_BASE_URL + 'unsub/' + person._id
-          );
+Respond to this email with last night's dreams and we'll record them for you..
 
-          mailer.send({
-              host : "smtp.sendgrid.net",
-              port : "587",
-              domain : "keepdream.me",
-              to : person.email,
-              from : '"KeepDream" <' + person._id + '@keepdream.me>',
-              subject: 'Remember Your Dreams: respond when you wake up!',
-              body: text,
-              authentication : "login",
-              //username : config.sendgrid.user,
-              //password : config.sendgrid.key,
-              username : process.env['SENDGRID_USERNAME'],
-              password : process.env['SENDGRID_PASSWORD'],
-            },
-            function(err, result){
-              if(err){
-                console.log(err, result);
-              }
-          });
-        }
-        closefn();
+Sincerely,
+KeepDream (%s)
+
+View past dreams: %s | Unsubscribe: %s`;
+
+      const text = util.format(
+        tmpl,
+        config.APP_BASE_URL,
+        config.APP_BASE_URL + 'view/' + person._id,
+        config.APP_BASE_URL + 'unsub/' + person._id
+      );
+
+      let transporter = nodemailer.createTransport({
+        host: 'smtp.sendgrid.net',
+        port: 587,
+        secure: false,
+        auth: {
+          user: process.env['SENDGRID_USERNAME'],
+          pass: process.env['SENDGRID_PASSWORD'],
+        },
       });
-    }); // end mongo find
-  }); // end mongo collection
+
+      await transporter.sendMail({
+        from: `"KeepDream" <${person._id}@keepdream.me>`,
+        to: person.email,
+        subject: 'Remember Your Dreams: respond when you wake up!',
+        text: text,
+      });
+    }
+  } catch (err) {
+    console.error(err);
+  } finally {
+    closefn();
+  }
 }
 
-mongo.connect(process.env.MONGOLAB_URL || "mongodb://localhost:27017", function(err, conn) {
-  if (err) throw err;
-  connection = conn;
+(async () => {
+  const url = process.env.MONGOLAB_URL || 'mongodb://localhost:27017';
+  const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
-  // check all the times
-  var n = 0;
-  for(var i=0; i < tzdata.names.length; i++) {
-    var name = tzdata.names[i];
-    // get time for this offset
-    var t = new time.Date();
-    try {
-      t.setTimezone(name);
-    }
-    catch(e) { continue; }
+  try {
+    await client.connect();
+    connection = client.db('your-db-name'); // Replace with your database name
 
-    if (timeToSend(t)) {
-      // execute job for these places!
-      console.log('Time to send in', name);
-      processTz(name);
-      n++;
+    // check all the times
+    let n = 0;
+    for (const name of tzdata.names) {
+      const t = utcToZonedTime(new Date(), name);
+
+      if (timeToSend(t)) {
+        console.log('Time to send in', name);
+        processTz(name);
+        n++;
+      }
     }
+
+    closefn = _.after(n, () => client.close());
+  } catch (err) {
+    console.error('Error:', err);
   }
-
-  closefn = _.after(n, function close() { conn.close(); });
-}); // end mongo connection
-
+})();

@@ -1,19 +1,18 @@
 {
   "name": "App",
   "dependencies": {
-    "express": "2.5.2",
-    "jade": "0.14.2",
-    "underscore": "latest",
-    "mongodb": "^2.2.36",
-    "connect": "2.x",
-    "validator": "latest",
-    "time": "latest",
-    "mailer": "latest"
+    "connect": "^3.7.0",
+    "date-fns-tz": "^2.0.0",
+    "express": "^4.17.1",
+    "jade": "^1.11.0",
+    "mongodb": "^4.1.4",
+    "nodemailer": "6.7.2",
+    "underscore": "1.13.1",
+    "validator": "13.7.0"
   },
-  "devDependencies": {},
   "main": "app",
   "engines": {
-    "node": "~7.1.0"
+    "node": ">=14.0.0"
   },
-  "version": "0.0.1"
+  "version": "1.0.0"
 }
