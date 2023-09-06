@@ -77,7 +77,7 @@ View past dreams: %s | Unsubscribe: %s`;
 
   try {
     await client.connect();
-    connection = client.db('your-db-name'); // Replace with your database name
+    connection = client.db('heroku_454v0pff');
 
     // check all the times
     let n = 0;
