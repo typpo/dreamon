@@ -1,0 +1,27 @@
+name = "keepdream"
+main = "src/worker.js"
+account_id = "2d93479a0c78707f4517a9335fba6388"
+workers_dev = true
+compatibility_date = "2026-05-03"
+compatibility_flags = ["nodejs_compat"]
+routes = [
+  { pattern = "keepdream.me/*", zone_name = "keepdream.me" },
+  { pattern = "www.keepdream.me/*", zone_name = "keepdream.me" },
+]
+
+[vars]
+APP_BASE_URL = "https://keepdream.me/"
+EMAIL_DOMAIN = "keepdream.me"
+MONGODB_DB = "heroku_454v0pff"
+FEEDBACK_TO = "typppo@gmail.com"
+MONGO_SERVER_SELECTION_TIMEOUT_MS = "5000"
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+[triggers]
+crons = ["0 * * * *"]
+
+[[send_email]]
+name = "EMAIL"

@@ -1,8 +1,0 @@
-module.exports = {
-  APP_BASE_URL: 'http://keepdream.me/',
-  sendgrid: {
-    user: 'abc@heroku.com',
-    key: 'abc123',
-  },
-
-}
